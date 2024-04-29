@@ -1,0 +1,60 @@
+#include <iostream>
+#include <cctype>
+
+using namespace std;
+
+// Function to encrypt a single character
+char encryptChar(char ch, int shift) {
+    if (isalpha(ch)) {
+        char base = islower(ch) ? 'a' : 'A';
+        return ((ch - base + shift) % 26) + base;
+    }
+    return ch; // Return unchanged if not a letter
+}
+
+// Function to encrypt a string
+string encryptString(const string& str, int shift) {
+    string result;
+    for (char ch : str) {
+        result += encryptChar(ch, shift);
+    }
+    return result;
+}
+
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        cout << "Usage: " << argv[0] << " <shift_amount>" << endl;
+        return 1;
+    }
+    int shift = atoi(argv[1]); // Convert shift amount from command line argument to integer
+
+    // Read input from stdin
+    string input;
+    getline(cin, input);
+
+    // Convert the message to uppercase
+    for (char& ch : input) {
+        ch = toupper(ch);
+    }
+
+    // Encrypt the message
+    string encrypted = encryptString(input, shift);
+
+    // Print the encrypted message with blocks of five letters
+    int count = 0;
+    for (char ch : encrypted) {
+        cout << ch;
+        count++;
+        if (isalpha(ch)) {
+            if (count % 5 == 0) {
+                cout << " ";
+            }
+            if (count % 50 == 0) {
+                cout << endl;
+            }
+        }
+    }
+    cout << endl;
+
+    return 0;
+}
